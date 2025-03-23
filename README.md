@@ -37,3 +37,20 @@ way to tell an app that UDP is blocked is to generate an ICMP dest-unreach
 packet in reply to a UDP one.
 
 Netfilter will do that by default for rules using the `REJECT` target.
+
+## Video conferencing
+
+Because not all VC can properly support a fallback to TCP, it is recommended to
+do that for only a selection of those services.
+
+Major VC services provide a list of IPs and ports used by the service, e.g.
+
+- [Microsoft Teams](https://learn.microsoft.com/en-us/microsoft-365/enterprise/urls-and-ip-address-ranges?view=o365-worldwide#microsoft-teams)
+- [Zoom](https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0060548)
+- [Google Meet](https://support.google.com/a/answer/1279090?hl=en#IP_ranges)
+
+IP sets (type: `hash:net,port`, match: `dst,dst`) should be used to optimise the
+matching, see `vc.list` file.
+
+Note: because these IPs and ports can change, it is important to have a way to
+easily update them, i.e. remotely.
