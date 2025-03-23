@@ -43,6 +43,11 @@ instead of transporting the UDP traffic in a TCP tunnel, because the end clients
 and servers will know that TCP is being used. They will then adapt their
 behaviour for the TCP protocol, resulting in a better user experience.
 
+Note that in case of TCP-to-MPTCP proxy that is going to change the source IP
+seen by the end server, it is recommended to tunnel the UDP traffic to the same
+server not to have UDP and TCP using different traffic. The DNS traffic doesn't
+necessarily need to be tunnelled.
+
 ## Video conferencing
 
 Because not all VC can properly support a fallback to TCP, it is recommended to
