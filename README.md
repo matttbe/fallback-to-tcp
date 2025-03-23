@@ -71,3 +71,18 @@ depending on the network conditions, e.g. lossy and unstable networks.
 
 Matching this traffic can be done by looking at destination IPs and port, or per
 protocol, e.g. DTLS.
+
+## QUIC
+
+Apps and services using QUIC should always support a fallback to TCP. QUIC is
+using UDP on port 443, but they are not the only ones to use this port. It is
+then recommended to identify QUIC. It should be possible to do that by looking
+at the first byte of the packet payload: it should be between 192 and 255
+according to RFC 9443.
+
+The `cbpf_quic.sh -4|-6` script generates cBPF code to match QUIC code, e.g.
+
+```shell
+iptables  -A OUTPUT -p udp --dport 443 -m bpf --bytecode "$(./cbpf_quic.sh -4)" -j REJECT
+ip6tables -A OUTPUT -p udp --dport 443 -m bpf --bytecode "$(./cbpf_quic.sh -6)" -j REJECT
+```
