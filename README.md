@@ -54,3 +54,20 @@ matching, see `vc.list` file.
 
 Note: because these IPs and ports can change, it is important to have a way to
 easily update them, i.e. remotely.
+
+## VPN
+
+Same here, not all VPN services properly support a fallback to TCP. Plus, using
+TCP might affect performances due to the [TCP Meltdown
+problem](https://en.wikipedia.org/wiki/Tunneling_protocol#TCP_meltdown_problem).
+A "simple" way to minimise this problem is to tell the inner TCP connections not
+to retransmit too aggressively (e.g. increasing `rto_min`), but that means
+controlling it, which might not be possible when using a transparent proxy.
+
+Because of the number of VPN services, it is recommended to deal with this case
+one by one rather than risking breaking connections. An alternative is to proxy
+UDP packets in a TCP tunnel, but the performances can be badly affected
+depending on the network conditions, e.g. lossy and unstable networks.
+
+Matching this traffic can be done by looking at destination IPs and port, or per
+protocol, e.g. DTLS.
