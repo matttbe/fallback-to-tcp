@@ -32,11 +32,16 @@ case, and fallback to TCP to benefit from a TCP-to-MPTCP proxy.
 
 ## Forcing apps to fallback to TCP
 
-Apps supporting a fallback to TCP will do so when UDP is blocked. The quickest
-way to tell an app that UDP is blocked is to generate an ICMP dest-unreach
-packet in reply to a UDP one.
+Apps supporting a fallback to TCP will do so when UDP is blocked.
 
-Netfilter will do that by default for rules using the `REJECT` target.
+The quickest way to tell an app that UDP is blocked is to generate an ICMP
+dest-unreach packet in reply to a UDP one. Netfilter will do that by default for
+rules using the `REJECT` target.
+
+When a fallback is supported, it is better to do so to use a TCP-to-MPTCP proxy
+instead of transporting the UDP traffic in a TCP tunnel, because the end clients
+and servers will know that TCP is being used. They will then adapt their
+behaviour for the TCP protocol, resulting in a better user experience.
 
 ## Video conferencing
 
