@@ -96,3 +96,7 @@ The `cbpf_quic.sh -4|-6` script generates cBPF code to match QUIC code, e.g.
 iptables  -A OUTPUT -p udp --dport 443 -m bpf --bytecode "$(./cbpf_quic.sh -4)" -j REJECT
 ip6tables -A OUTPUT -p udp --dport 443 -m bpf --bytecode "$(./cbpf_quic.sh -6)" -j REJECT
 ```
+
+In this example, the `OUTPUT` chain is used. This should of course be updated
+depending on the use-case, e.g. the `FORWARD` one for a router, and eventually
+the `INPUT` one, before an interception.
