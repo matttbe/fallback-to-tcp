@@ -90,6 +90,8 @@ then recommended to identify QUIC. It should be possible to do that by looking
 at the first byte of the packet payload: it should be between 192 and 255
 according to RFC 9443.
 
+### IPTables
+
 The `cbpf_quic.sh -4|-6` script generates cBPF code to match QUIC code, e.g.
 
 ```shell
@@ -100,3 +102,16 @@ ip6tables -A OUTPUT -p udp --dport 443 -m bpf --bytecode "$(./cbpf_quic.sh -6)" 
 In this example, the `OUTPUT` chain is used. This should of course be updated
 depending on the use-case, e.g. the `FORWARD` one for a router, and eventually
 the `INPUT` one, before an interception.
+
+### NFTables
+
+Here is the equivalent using NFTables and the raw payload expression to match
+the first byte:
+
+```shell
+nft add rule ip  filter OUTPUT udp dport 443 udp length ge 1208 @ih,0,8 ge 192 counter reject
+nft add rule ip6 filter OUTPUT udp dport 443 udp length ge 1208 @ih,0,8 ge 192 counter reject
+```
+
+Same here, in this example, the `OUTPUT` chains are used in the filter tables.
+This should of course be updated depending on the use-case.
