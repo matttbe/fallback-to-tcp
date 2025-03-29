@@ -87,8 +87,13 @@ protocol, e.g. DTLS.
 Apps and services using QUIC should always support a fallback to TCP. QUIC is
 using UDP on port 443, but they are not the only ones to use this port. It is
 then recommended to identify QUIC. It should be possible to do that by looking
-at the first byte of the packet payload: it should be between 192 and 255
-according to RFC 9443.
+at the size (min 1200 byte: RFC 9000 §8.1), and the first byte of the packet
+payload: it should be between 192 and 255 according to RFC 9443.
+
+Note that ideally, a tracking of the connections should be done to act only on
+the first packet of a connection. This would avoid matching packets from other
+protocols that might set the first byte to >192 after the initialisation of the
+connection.
 
 ### IPTables
 
